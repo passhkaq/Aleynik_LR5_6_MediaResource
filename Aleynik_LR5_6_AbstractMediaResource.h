@@ -5,9 +5,7 @@
 
 class MediaResource {
     private:
-        int id;
         string title;
-        bool isAvailable;
     public:
         //constructors
         MediaResource() {}
@@ -36,6 +34,8 @@ class MediaResource {
         }
 
     protected:
+        int id;
+        bool isAvailable;
         virtual ostream& display(ostream& os) const = 0;
         virtual istream& input(istream& is);
 };
