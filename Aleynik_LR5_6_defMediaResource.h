@@ -11,6 +11,7 @@
 #include <sstream>
 #include <iomanip>
 #include <cstdlib>
+#include <ctime>
 using namespace std;
 
 // entr check

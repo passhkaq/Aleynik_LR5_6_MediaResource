@@ -6,21 +6,66 @@ class Book : virtual public MediaResource {
     private:
         string author;
         int pages;
-        string dueDate;
+        int dueDate;
     public:
         //constructors
-        Book() {}
-        Book(const Book& other) : author(other.author), pages(other.pages),
-            dueDate(other.dueDate) {}
+        Book()
+        : MediaResource(), author(), pages(0), dueDate() {}
+        Book(int id, string title, string author, int pages, int due)
+        : MediaResource(id, title),
+            author(move(author)),
+            pages(pages),
+            dueDate(due) {}
         Book(const int& id) : MediaResource(id) {}
-        ~Book() {}
+        ~Book() override {}
 
         //methods
-        void rent() override { dueDate = 30; }
-        bool validate() const { if (pages > 0) { return true; } else { return false; } }
-        void displayinfo() {}
-        void extendRental();
-        const Book& operator + (const Book& other);
+        void rent() override {
+            dueDate = 30;
+            setIsAvailable(false);
+        }
+        bool validate() const {
+            return pages > 0;
+        }
+        void displayInfo() const {
+            std::cout << "Book ID: " << getId()
+                    << ", Title: "  << getTitle()
+                    << ", Author: " << author
+                    << ", Pages: "  << pages
+                    << ", Available: " << (getIsAvailable() ? "Available" : "Unavailable")
+                    << "\n";
+        }
+        void extendRental() {
+            enterInteger(dueDate, "Enter the number of days to extend: ", 1, 45);
+        }
+        Book operator+(const Book& other) const {
+            Book result(*this);
+            if (result.author == other.author) {
+                string newTitle = result.getTitle() + " & " + other.getTitle();
+                int randomID = rand() % 100 + 100;
+                result.setTitle(newTitle);
+                result.setId(randomID);
+                result.setIsAvailable(true);
+                result.pages += other.pages;
+            }
+            return result;
+        }
+    protected:
+        ostream& display(ostream& os) const override {
+            os << "Book[ID=" << getId()
+            << ", Title=" << getTitle()
+            << ", Author=" << author
+            << ", Pages="  << pages
+            << ", Availability=" << (getIsAvailable() ? "Available" : "Unavailable")
+            << "]";
+            return os;
+        }
+
+        istream& input(istream& is) override {
+            is >> id >> title >> author >> pages;
+            return is;
+        }
 };
+
 
 #endif //_ALEYNIK_LR5_6_CHILDBOOK_H_
