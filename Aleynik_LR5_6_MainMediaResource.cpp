@@ -1,4 +1,3 @@
-#include "Aleynik_LR5_6_defMediaResource.h"
 #include "Aleynik_LR5_6_MethodsMediaResource.cpp"
 
 struct menuItem {
@@ -30,7 +29,7 @@ int main() {
         }
         cout << "0. Exit" << endl;
 
-        enterInteger(choice, "Enter your choice: ", 0, 10);
+        enterInteger(choice, "Enter your choice: ", 0, 10); cout << endl;
 
         if (choice == 0) {
             cout << "Poka Poka" << endl;

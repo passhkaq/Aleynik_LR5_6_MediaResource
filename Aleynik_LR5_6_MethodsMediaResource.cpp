@@ -3,6 +3,7 @@
 #include "Aleynik_LR5_6_ChildDVD.h"
 #include "Aleynik_LR5_6_MultiDigitalResource.h"
 
+
 vector<unique_ptr<MediaResource>> vectorMediaResource;
 
 
@@ -10,14 +11,14 @@ void showMediaResource() {
     if (vectorMediaResource.size() > 0) {
         for (auto it = vectorMediaResource.begin(); it != vectorMediaResource.end(); ++it) {
             cout << (it - vectorMediaResource.begin()) << ": ";
-            cout << **it;
+            cout << **it << endl;
         }
     }
 }
 MediaResource* vspom(const string& mes) {
-    showMediaResource();
+    showMediaResource(); cout << endl;
     int number = 0;
-    enterInteger(number, "Enter the number of " + mes, 0, vectorMediaResource.size());
+    enterInteger(number, "Enter the number of " + mes, 0, vectorMediaResource.size()); cout << endl;
     MediaResource* basePtr = vectorMediaResource[number].get();
     return basePtr;
 }
@@ -29,7 +30,7 @@ void createNewBook() {
 void createCopyBook() {
     Book* source = dynamic_cast<Book*>(vspom("Book"));
     if (!source) {
-        cerr << "ERROR! This is not Book\n";
+        cerr << "ERROR! This is not a Book\n";
         return;
     }
     Book* copy = new Book(*source);
@@ -53,7 +54,7 @@ void createModifyDVD() {
 void createCopyDVD() {
     DVD* source = dynamic_cast<DVD*>(vspom("DVD"));
     if (!source) {
-        cerr << "ERROR! This is not Book\n";
+        cerr << "ERROR! This is not a Book\n";
         return;
     }
     DVD* copy = new DVD(*source);
@@ -61,7 +62,7 @@ void createCopyDVD() {
 }
 void demonstratePolymorphism() {
     for (const auto& MediaResource : vectorMediaResource) {
-        cout << *MediaResource;
+        cout << *MediaResource << endl;
         cout << "Rent: "; MediaResource->rent(); cout << endl;
         cout << "Return: "; MediaResource->returnResource(); cout << endl;
         cout << "==========================" << endl;
@@ -74,7 +75,7 @@ void demonstrateAdd() {
         return;
     }
     auto combinedBook = *sourceB + *sourceB;
-    vectorMediaResource.emplace_back(combinedBook);
+    vectorMediaResource.emplace_back(combinedBook.clone());
 
     DVD* sourceD = dynamic_cast<DVD*>(vspom("DVD"));
     if (!sourceD) {
@@ -82,7 +83,7 @@ void demonstrateAdd() {
         return;
     }
     auto combinedDVD = *sourceD + *sourceD;
-    vectorMediaResource.emplace_back(combinedDVD);
+    vectorMediaResource.emplace_back(combinedDVD.clone());
 }
 
 void createDigitalResource() {

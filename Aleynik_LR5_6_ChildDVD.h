@@ -1,21 +1,22 @@
 #ifndef _ALEYNIK_LR5_6_CHILD_DVD_H
 #define _ALEYNIK_LR5_6_CHILD_DVD_H
-
 #include "Aleynik_LR5_6_AbstractMediaResource.h"
+
 
 class DVD final : virtual public MediaResource {
     private:
         string director;
         int duration;
         bool isDamaged;
-        map<string, vector<string>> collection;
     public:
         //constructors
         DVD()
-        : MediaResource(), director(), duration(0), isDamaged() {}
+        : MediaResource(), director(""), duration(0), isDamaged(false) {}
+        DVD(string title)
+        : MediaResource(title), director(""), duration(0), isDamaged(false) {}
         DVD(int id, string title, string director, int duration, bool isDamaged)
         : MediaResource(id, title),
-            director(move(director)),
+            director(std::move(director)),
             duration(duration),
             isDamaged(isDamaged) {}
         DVD(const int& id) : MediaResource(id) {}
@@ -42,6 +43,7 @@ class DVD final : virtual public MediaResource {
         void markAsDamaged() {
             isDamaged = true;
         }
+        DVD* clone() const override { return new DVD(*this); }
         DVD operator+(const DVD& other) const {
             DVD result(*this);
             if (result.director == other.director) {
@@ -55,29 +57,23 @@ class DVD final : virtual public MediaResource {
             }
             return result;
         }
-        ostream& display(ostream& os) const override {
-            os << "Title: " << getTitle()
-            << ", Director: " << director
-            << ", Duration: " << duration
-            << ", ID: " << getId()
-            << ", Damaged: " << (isDamaged ? "Yes" : "No")
-            << ", Availability: " << (getIsAvailable() ? "Available" : "Unavailable");
-            return os;
-        }
     protected:
         ostream& display(ostream& os) const override {
-            os << "Book[ID=" << getId()
-            << ", Title=" << getTitle()
-            << ", Director=" << director
-            << ", duration="  << duration
-            << ", Damaged= " << (isDamaged ? "Yes" : "No")
-            << ", Availability=" << (getIsAvailable() ? "Available" : "Unavailable")
+            os << "DVD[ID: " << getId()
+            << ", Title: " << getTitle()
+            << ", Director: " << director
+            << ", duration: "  << duration
+            << ", Damaged: " << (isDamaged ? "Yes" : "No")
+            << ", Availability: " << (getIsAvailable() ? "Available" : "Unavailable")
             << "]";
             return os;
         }
 
         istream& input(istream& is) override {
-            is >> id >> title >> director >> duration;
+            // MediaResource::input(is);
+            enterString(director, "Enter the author: ", is);
+            enterString(title, "Enter the title: ", is);
+            enterInteger(duration, "Enter the duration: ", 1, 99999, is);
             return is;
         }
 };

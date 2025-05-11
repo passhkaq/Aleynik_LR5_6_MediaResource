@@ -4,7 +4,7 @@
 #include "Aleynik_LR5_6_AbstractMediaResource.h"
 #include "Aleynik_LR5_6_ParentLicenseValidator.h"
 
-class DigitalResource : public MediaResource, public LicenseValidator {
+class DigitalResource : virtual public MediaResource, virtual public LicenseValidator {
     private:
         string licenseKey;
         string format;
@@ -31,29 +31,25 @@ class DigitalResource : public MediaResource, public LicenseValidator {
             } else { cout << "It is temporarily impossible to rent"; }
         }
         void returnResource() override {
+            setIsAvailable(true);
             cout << this->getTitle() << " license " << this->licenseKey << " is no longer rented" << endl;
         }
-        ostream& display(ostream& os) const override {
-            os << "DigitalResource ID: " << getId()
-            << ", Title: " << getTitle()
-            << ", Format: " << format
-            << ", License: " << licenseKey
-            << ", Availability: " << (getIsAvailable() ? "Available" : "Unavailable");
-            return os;
-        }
+        MediaResource* clone() const override { return new DigitalResource(*this); }
     protected:
         ostream& display(ostream& os) const override {
-            os << "Digital Resource[ID=" << getId()
-            << ", Title=" << getTitle()
-            << ", Format=" << format
-            << ", License="  << licenseKey
-            << ", Availability=" << (getIsAvailable() ? "Available" : "Unavailable")
+            os << "Digital Resource[ID: " << getId()
+            << ", Title: " << getTitle()
+            << ", Format: " << format
+            << ", License: "  << licenseKey
+            << ", Availability: " << (getIsAvailable() ? "Available" : "Unavailable")
             << "]";
             return os;
         }
 
         istream& input(istream& is) override {
-            is >> id >> title >> format >> licenseKey;
+            enterString(licenseKey, "Enter the license: ", is);
+            enterString(title, "Enter the title: ", is);
+            enterString(format, "Enter the amount of pages: ", is);
             return is;
         }
 

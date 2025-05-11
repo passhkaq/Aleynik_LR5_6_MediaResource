@@ -1,6 +1,5 @@
 #ifndef _ALEYNIK_LR5_6_PARENTLECENSEVALIDATOR_H
 #define _ALEYNIK_LR5_6_PARENTLECENSEVALIDATOR_H
-
 #include "Aleynik_LR5_6_defMediaResource.h"
 
 class LicenseValidator {

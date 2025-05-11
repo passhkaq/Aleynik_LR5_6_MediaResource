@@ -6,12 +6,15 @@
 class MediaResource {
     public:
         //constructors
-        MediaResource() {}
+        MediaResource()
+        : title(""), id(0), isAvailable(true) {}
+        MediaResource(string title)
+        : title(title), id(0), isAvailable(true) {}
         MediaResource(const MediaResource& other) : id(other.id), title(other.title),
             isAvailable(other.isAvailable) {}
         MediaResource(int id, string title) : id(id), title(std::move(title)), isAvailable(true) {}
         MediaResource(const int& id) : id(id) {}
-        virtual ~MediaResource() {}
+        virtual ~MediaResource() = default;
 
         //getters-setters
         const int& getId() const { return id; }
@@ -22,8 +25,9 @@ class MediaResource {
         void setIsAvailable(bool isAvailable) { this->isAvailable = isAvailable; }
 
         //methods
-        virtual void rent();
-        virtual void returnResource();
+        virtual void rent() = 0;
+        virtual void returnResource() = 0;
+        virtual MediaResource* clone() const = 0;
         const MediaResource& operator = (const MediaResource& other);
         friend ostream& operator << (ostream& os, const MediaResource& MediaResource) {
             return MediaResource.display(os);
@@ -37,7 +41,7 @@ class MediaResource {
         int id;
         bool isAvailable;
         virtual ostream& display(ostream& os) const = 0;
-        virtual istream& input(istream& is);
+        virtual istream& input(istream& is) = 0;
 };
 
 

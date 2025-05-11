@@ -12,6 +12,7 @@
 #include <iomanip>
 #include <cstdlib>
 #include <ctime>
+#include <utility>
 using namespace std;
 
 // entr check

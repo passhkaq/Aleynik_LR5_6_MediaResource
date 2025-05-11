@@ -2,6 +2,7 @@
 #define _ALEYNIK_LR5_6_CHILDBOOK_H_
 #include "Aleynik_LR5_6_AbstractMediaResource.h"
 
+
 class Book : virtual public MediaResource {
     private:
         string author;
@@ -10,10 +11,12 @@ class Book : virtual public MediaResource {
     public:
         //constructors
         Book()
-        : MediaResource(), author(), pages(0), dueDate() {}
+        : MediaResource(), author(""), pages(0), dueDate(0) {}
+        Book(string title)
+        : MediaResource(title), author(""), pages(0), dueDate(0) {}
         Book(int id, string title, string author, int pages, int due)
         : MediaResource(id, title),
-            author(move(author)),
+            author(std::move(author)),
             pages(pages),
             dueDate(due) {}
         Book(const int& id) : MediaResource(id) {}
@@ -21,7 +24,7 @@ class Book : virtual public MediaResource {
 
         //methods
         void rent() override {
-            if (validate) {
+            if (validate()) {
                 dueDate = 30;
                 setIsAvailable(false);
                 cout << "You've successfully rented " << this->getTitle() << " by " << this->author << endl;
@@ -39,14 +42,7 @@ class Book : virtual public MediaResource {
             setIsAvailable(true);
             cout << this->getTitle() << " by " << this->author << " is no longer rented" << endl;
         }
-        void displayInfo() const {
-            std::cout << "Book ID: " << getId()
-                    << ", Title: "  << getTitle()
-                    << ", Author: " << author
-                    << ", Pages: "  << pages
-                    << ", Available: " << (getIsAvailable() ? "Available" : "Unavailable")
-                    << "\n";
-        }
+        Book* clone() const override { return new Book(*this); }
         Book operator+(const Book& other) const {
             Book result(*this);
             if (result.author == other.author) {
@@ -61,17 +57,20 @@ class Book : virtual public MediaResource {
         }
     protected:
         ostream& display(ostream& os) const override {
-            os << "Book[ID=" << getId()
-            << ", Title=" << getTitle()
-            << ", Author=" << author
-            << ", Pages="  << pages
-            << ", Availability=" << (getIsAvailable() ? "Available" : "Unavailable")
+            os << "Book[ID: " << getId()
+            << ", Title: " << getTitle()
+            << ", Author: " << author
+            << ", Pages: "  << pages
+            << ", Availability: " << (getIsAvailable() ? "Available" : "Unavailable")
             << "]";
             return os;
         }
 
         istream& input(istream& is) override {
-            is >> id >> title >> author >> pages;
+            // MediaResource::input(is);
+            enterString(author, "Enter the author: ", is);
+            enterString(title, "Enter the title: ", is);
+            enterInteger(pages, "Enter the amount of pages: ", 1, 99999, is);
             return is;
         }
 };
