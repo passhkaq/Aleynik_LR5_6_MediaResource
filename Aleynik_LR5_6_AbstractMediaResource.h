@@ -1,16 +1,15 @@
 #ifndef _ALEYNIK_LR5_6_ABSTRACTCLASSMEDIARESOURCE_H_
 #define _ALEYNIK_LR5_6_ABSTRACTCLASSMEDIARESOURCE_H_
-#include "Aleynik_LR5_6_defMediaResourse.h"
+#include "Aleynik_LR5_6_defMediaResource.h"
 
 
 class MediaResource {
-    private:
-        string title;
     public:
         //constructors
         MediaResource() {}
         MediaResource(const MediaResource& other) : id(other.id), title(other.title),
             isAvailable(other.isAvailable) {}
+        MediaResource(int id, string title) : id(id), title(std::move(title)), isAvailable(true) {}
         MediaResource(const int& id) : id(id) {}
         virtual ~MediaResource() {}
 
@@ -34,6 +33,7 @@ class MediaResource {
         }
 
     protected:
+        string title;
         int id;
         bool isAvailable;
         virtual ostream& display(ostream& os) const = 0;

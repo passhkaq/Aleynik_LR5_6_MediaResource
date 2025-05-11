@@ -21,11 +21,23 @@ class Book : virtual public MediaResource {
 
         //methods
         void rent() override {
-            dueDate = 30;
-            setIsAvailable(false);
+            if (validate) {
+                dueDate = 30;
+                setIsAvailable(false);
+                cout << "You've successfully rented " << this->getTitle() << " by " << this->author << endl;
+            } else { cout << "It is temporarily impossible to rent"; }
         }
         bool validate() const {
             return pages > 0;
+        }
+        void extendRental() {
+            dueDate = 45;
+            cout << "You've successfully extended rental on 15 days" << endl;
+        }
+        void returnResource() override {
+            dueDate = 0;
+            setIsAvailable(true);
+            cout << this->getTitle() << " by " << this->author << " is no longer rented" << endl;
         }
         void displayInfo() const {
             std::cout << "Book ID: " << getId()
@@ -34,9 +46,6 @@ class Book : virtual public MediaResource {
                     << ", Pages: "  << pages
                     << ", Available: " << (getIsAvailable() ? "Available" : "Unavailable")
                     << "\n";
-        }
-        void extendRental() {
-            enterInteger(dueDate, "Enter the number of days to extend: ", 1, 45);
         }
         Book operator+(const Book& other) const {
             Book result(*this);

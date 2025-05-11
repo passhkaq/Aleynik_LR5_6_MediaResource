@@ -1,4 +1,5 @@
-#include "Aleynik_LR5_6_defMediaResourse.h"
+#include "Aleynik_LR5_6_defMediaResource.h"
+#include "Aleynik_LR5_6_MethodsMediaResource.cpp"
 
 struct menuItem {
     string title;
@@ -7,7 +8,16 @@ struct menuItem {
 
 int main() {
     map<int, menuItem> menu = {
-        {1, {"", }},
+        {1, {"Show media Resource", showMediaResource}},
+        {2, {"Create new book", createNewBook}},
+        {3, {"Create copy book", createCopyBook}},
+        {4, {"Create modify book", createModifyBook}},
+        {5, {"Create new DVD", createNewDVD}},
+        {6, {"Create copy DVD", createCopyDVD}},
+        {7, {"Create modify DVD", createModifyDVD}},
+        {8, {"Demonstrate polymorphism", demonstratePolymorphism}},
+        {9, {"Demonstrate add", demonstrateAdd}},
+        {10, {"Create Digital Resource", createDigitalResource}},
     };
 
     int choice = 0;

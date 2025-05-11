@@ -25,7 +25,8 @@ class DVD final : virtual public MediaResource {
         void rent() override {
             if (isDamaged == false && validate() == true) {
                 isAvailable = false;
-            }
+                cout << "You've successfully rented " << this->getTitle() << " by " << this->director << endl;
+            } else { cout << "It is temporarily impossible to rent"; }
         }
         bool validate() const {
             return duration > 0;
@@ -36,6 +37,7 @@ class DVD final : virtual public MediaResource {
                 isDamaged = true;
             }
             setIsAvailable(true);
+            cout << this->getTitle() << " by " << this->director << " is no longer rented" << endl;
         }
         void markAsDamaged() {
             isDamaged = true;
@@ -59,7 +61,7 @@ class DVD final : virtual public MediaResource {
             << ", Duration: " << duration
             << ", ID: " << getId()
             << ", Damaged: " << (isDamaged ? "Yes" : "No")
-            << ", Availability=" << (getIsAvailable() ? "Available" : "Unavailable");
+            << ", Availability: " << (getIsAvailable() ? "Available" : "Unavailable");
             return os;
         }
     protected:
@@ -68,7 +70,7 @@ class DVD final : virtual public MediaResource {
             << ", Title=" << getTitle()
             << ", Director=" << director
             << ", duration="  << duration
-            << ", Damaged: " << (isDamaged ? "Yes" : "No")
+            << ", Damaged= " << (isDamaged ? "Yes" : "No")
             << ", Availability=" << (getIsAvailable() ? "Available" : "Unavailable")
             << "]";
             return os;
